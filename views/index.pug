@@ -1,0 +1,35 @@
+extends layout
+
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/index.css")
+  link(rel="stylesheet" href="/stylesheets/navbar.css")
+  link(rel='stylesheet' href='/stylesheets/footer.css')
+
+  //- add page specific js
+  script(src="/javascripts/index.js" type="module" defer)
+
+block content
+  include navbar.pug
+  div.content-container
+    div.header-container
+      h1 Taco Feed
+    ul.cards
+      li.cards-item
+        for post in posts
+          div.card
+            h2.post-title= post.title
+            p.post-text= post.body
+            a(href=`/posts/${post.id}`).read-button READ #{post.post_type}
+        //- div.card
+        //-   h2.post-title Title
+        //-   p.post-text Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore nobis quisquam sequi officiis atque cupiditate voluptatum totam aperiam perspiciatis commodi. Esse assumenda laborum nihil soluta sit, quibusdam alias inventore repellat?
+        //-   button.read-button Read Post
+        //- div.card
+        //-   h2.post-title Second Title
+        //-   p.post-text Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore nobis quisquam sequi officiis atque cupiditate voluptatum totam aperiam perspiciatis commodi. Esse assumenda laborum nihil soluta sit, quibusdam alias inventore repellat?
+        //-   button.read-button read post
+        //- div.card
+        //-   h2.post-title Third Title
+        //-   p.post-text Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore nobis quisquam sequi officiis atque cupiditate voluptatum totam aperiam perspiciatis commodi. Esse assumenda laborum nihil soluta sit, quibusdam alias inventore repellat?
+        //-   button.read-button read post

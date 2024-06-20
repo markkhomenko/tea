@@ -1,0 +1,74 @@
+extends layout.pug
+
+block content
+  include navbar.pug
+  link(rel='stylesheet' href='/stylesheets/login.css')
+  script(src="/javascripts/form.js")
+
+  form.form-box
+    div.input-group
+      input(type="text", name="title" value= post.title)
+      div.selection.post-type
+        label Change the post type
+        select(name="postType", id="postType", required)
+          option(value="story", selected= (post.post_type == 'story')) Story
+          option(value="recipe", selected= (post.post_type == 'recipe')) Recipe
+      .selection.comments-select
+        label Allow user comments?
+        select(name="isComments", required)
+          option(value="true", selected=(true === post.comments)) Yes
+          option(value="false", selected=(false === post.comments)) No
+      .selection.emojis-select
+        label Allow user emojis and likes?
+        select(name="isEmojis", required)
+          option(value="true", selected=(true === post.likes)) Yes
+          option(value="false", selected=(false === post.likes)) No
+      textarea(name="body", required)= post.body
+      input(type="hidden", name="_csrf", value= csrfToken)
+      div(class="recipe")
+        div.input-group
+          input(type="text", name="recipeName", value= post.Recipe ? post.Recipe.name : "", placeholder="Recipe Name")
+          .selection.vegetarian
+            label Is this recipe vegetarian?
+            select(name="isVegetarian", id="isVegetarian", required)
+              option(value="true", default, selected=(true === (post.Recipe ? post.Recipe.is_vegetarian : true))) Yes
+              option(value="false", selected=(false === (post.Recipe ? post.Recipe.is_vegetarian : true))) No
+          .selection.vegan
+            label Is this recipe vegan?
+            select(name="isVegan", id="isVegan", required)
+              option(value="true", default, selected=(true === (post.Recipe ? post.Recipe.is_vegan : true))) Yes
+              option(value="false", selected=(false === (post.Recipe ? post.Recipe.is_vegan : true))) No
+          .selection.gluten-free
+            label Is this recipe gluten free?
+            select(name="isGlutenFree", id="isGlutenFree", required)
+              option(value="true", default, selected=(true === (post.Recipe ? post.Recipe.is_gluten_free : true))) Yes
+              option(value="false", selected=(false === (post.Recipe ? post.Recipe.is_gluten_free : true))) No
+          textarea(name="recipeBody", placeholder="Give someone a taco, they eat for a day. Teach them its recipe, they eat for a lifetime.", required)= (post.Recipe ? post.Recipe.body : "")
+      div(hidden).error-box
+      .crud-buttons
+        button#post-edit.edit-buttons Modify
+        button#post-delete.edit-buttons Delete
+      .emoji-box
+        for emoji in emojis
+          div(name= emoji.symbol).emoji-container
+            button(name= emoji.symbol, hidden= (post.likes === false))#emoji= emoji.symbol
+            div(id= "count", hidden= (post.likes === false))= emoji.count
+
+  div(hidden).comment-box
+  form.form-box.comment-box
+    textarea(name="comment", placeholder= "Lettuce know what you want to add")#comment-text-area
+    button(name="comment-submit")#add-comment Add Comment
+    for comment in comments
+      div.comments-container
+        div(class= (userId === comment.author_id ? "hidden" : ""))#comment-content=comment.content
+        div#comment-footer
+          div(id= "comment-user", class= (userId === comment.author_id ? "hidden" : ""))
+            span#comment-user posted by
+            span#user-name= comment.User.user_name
+          div
+            textarea.comment-field(name="comment", id= comment.id, class= (userId === comment.author_id ? "" : "hidden"))= comment.content
+          div(class= (userId === comment.author_id ? "" : "hidden")).comment-buttons-container
+            button(id= comment.id).comment-edit.comment-buttons Modify
+            button(id= comment.id).comment-delete.comment-buttons Delete
+          div#comment-time 
+            span#user-time= comment.createdAt

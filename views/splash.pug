@@ -1,0 +1,30 @@
+extends layout
+
+append head
+    link(rel='stylesheet' href='/stylesheets/splash.css')
+
+block content
+    header
+        nav.nav-container
+            img(src="/navbarTacoStache.png", alt="Taco Image")
+            div.nav-items
+                a(href='/users/login') Sign In
+                a(href='/users/new')
+                    button(type="button") Get Started
+    div.content-container
+        div.box-container
+            h1 Taco Tea is a place to write, read, and eat
+            img.taco-pic(src="/tacoStache.png", alt="Taco image")
+            h3 Satisfy your cravings and share your love for tacos!
+            a(href='/users/login')
+                button(type="button") Start Salivating
+    div.line
+    div.post-box-container
+        div.splash-post-container
+            for post in posts
+                div.splash-number-container
+                    p.splash-post-number= `0${post.order}`
+                div.splash-post-box
+                    h2.splash-post-title= post.title
+                    footer.splash-post-date= post.newDate
+
